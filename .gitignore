@@ -1,0 +1,48 @@
+# ESPHome build artifacts
+.esphome/
+**/.esphome/
+**/build/
+**/.pioenvs/
+**/.pio/
+
+# Secrets and configuration
+secrets.yaml
+**/secrets.yaml
+
+# Temporary files
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Backup files
+*.bak
+*.backup
+*_backup.*
+*_working/
+*working*/
+
+# Compiled firmware
+*.bin
+*.elf
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+
+# Documentation builds
+docs/_build/
+
+# Project specific
+.claude/
+tools/manual.py
