@@ -30,8 +30,9 @@ rtl87xx:
 
 external_components:
   - source:
-      type: local
-      path: my_components
+      type: git
+      url: https://github.com/kadam12g/Hisense-AC-ESPHome
+      path: ESPHome/my_components
     components: [hisense_ac]
 
 # Logging configuration - UART0 disabled to avoid conflicts

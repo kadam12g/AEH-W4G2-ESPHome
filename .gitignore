@@ -46,3 +46,6 @@ docs/_build/
 # Project specific
 .claude/
 tools/manual.py
+
+# Firmware with account info in it
+firmware/firmware_backup.bin
