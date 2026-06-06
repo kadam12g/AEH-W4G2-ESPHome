@@ -304,6 +304,11 @@ void CommandSender::send_message(const std::vector<uint8_t>& message) {
   }
   // Send through parent's UARTDevice interface
   this->parent_->write_array(message.data(), message.size());
+  // Block until every byte has physically left the UART before flipping the
+  // RS485 transceiver back to receive mode. Without this, write_array() returns
+  // while the last bytes are still shifting out, DE drops mid-frame, the AC
+  // sees a truncated frame and never replies (TX ok, zero RX).
+  this->parent_->flush();
 
   if (this->parent_->flow_control_pin_ != nullptr) {
     this->parent_->flow_control_pin_->digital_write(false);
