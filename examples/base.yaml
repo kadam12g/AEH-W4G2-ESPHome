@@ -1,0 +1,252 @@
+# Shared base configuration for all AEH-W4G2 example configs.
+# Sourced automatically via the packages: github:// directive — do not include directly.
+#
+# Contains: UART, climate component, all switches, selects, sensors, binary sensors.
+# Does NOT contain: board, wifi, connectivity (API/MQTT), OTA, logger — those are
+# defined in each example config to allow per-use-case customisation.
+
+# UART configuration for AC communication
+uart:
+  id: ac_uart
+  tx_pin: PA23
+  rx_pin: PA18
+  baud_rate: 9600
+  data_bits: 8
+  parity: NONE
+  stop_bits: 1
+  debug:
+    direction: RX
+    dummy_receiver: true
+    after:
+      delimiter: [0xF4, 0xFB]
+    sequence:
+      - lambda: |-
+          if (direction == UART_DIRECTION_RX && id(hisense_climate) != nullptr) {
+            std::vector<uint8_t> data(bytes.begin(), bytes.end());
+            id(hisense_climate).on_uart_message(data);
+          }
+
+climate:
+  - platform: hisense_ac
+    name: "Hisense AC"
+    id: hisense_climate
+    uart_id: ac_uart
+    flow_control_pin: PA14
+
+switch:
+  - platform: template
+    name: "Beep on command"
+    id: ac_beep
+    icon: "mdi:volume-high"
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_ON
+    turn_on_action:
+      - lambda: id(hisense_climate).set_buzzer_enabled(true);
+    turn_off_action:
+      - lambda: id(hisense_climate).set_buzzer_enabled(false);
+
+  - platform: template
+    name: "Display"
+    id: ac_display
+    icon: "mdi:numeric"
+    restore_mode: RESTORE_DEFAULT_ON
+    turn_on_action:
+      - lambda: id(hisense_climate).set_display_status(true);
+    turn_off_action:
+      - lambda: id(hisense_climate).set_display_status(false);
+
+  - platform: template
+    name: "Boost mode"
+    id: ac_boost_sw
+    icon: "mdi:rocket-launch"
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - lambda: id(hisense_climate).set_boost_mode(true);
+    turn_off_action:
+      - lambda: id(hisense_climate).set_boost_mode(false);
+
+  - platform: template
+    name: "ECO mode"
+    id: ac_eco_sw
+    icon: "mdi:leaf"
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - lambda: id(hisense_climate).set_eco_mode(true);
+    turn_off_action:
+      - lambda: id(hisense_climate).set_eco_mode(false);
+
+  - platform: template
+    name: "Quiet mode"
+    id: ac_quiet_sw
+    icon: "mdi:volume-low"
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - lambda: id(hisense_climate).set_quiet_mode(true);
+    turn_off_action:
+      - lambda: id(hisense_climate).set_quiet_mode(false);
+
+  - platform: template
+    name: "Sleep mode"
+    id: ac_sleep_sw
+    icon: "mdi:sleep"
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - lambda: id(hisense_climate).set_sleep_enabled(true);
+    turn_off_action:
+      - lambda: id(hisense_climate).set_sleep_enabled(false);
+
+  - platform: template
+    name: "Power"
+    id: ac_power_sw
+    icon: "mdi:air-conditioner"
+    restore_mode: RESTORE_DEFAULT_OFF
+    turn_on_action:
+      - lambda: id(hisense_climate).set_power_state(true);
+    turn_off_action:
+      - lambda: id(hisense_climate).set_power_state(false);
+
+select:
+  - platform: template
+    name: "Sleep Mode Type"
+    id: sleep_mode_select
+    icon: "mdi:sleep"
+    options:
+      - "Sleep (General)"
+      - "Sleep for Young"
+      - "Sleep for Old"
+      - "Sleep for Kids"
+    initial_option: "Sleep (General)"
+    restore_value: true
+    set_action:
+      - lambda: id(hisense_climate).set_preferred_sleep_mode(x);
+
+binary_sensor:
+  - platform: template
+    name: "Power-on Timer Active"
+    id: ac_poweron_enabled
+
+  - platform: template
+    name: "Power-off Timer Active"
+    id: ac_poweroff_enabled
+
+  - platform: template
+    name: "Vertical Swing"
+    id: ac_vertical_swing
+
+  - platform: template
+    name: "Horizontal Swing"
+    id: ac_horizontal_swing
+
+.ac_sensor_base: &ac_sensor_base
+  platform: template
+  state_class: measurement
+  accuracy_decimals: 0
+
+sensor:
+  - <<: *ac_sensor_base
+    name: "Indoor Temperature"
+    unit_of_measurement: "°C"
+    device_class: temperature
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_indoor_temperature() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Indoor Set Temperature"
+    unit_of_measurement: "°C"
+    device_class: temperature
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_indoor_temperature_setting() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Indoor Pipe Temperature"
+    unit_of_measurement: "°C"
+    device_class: temperature
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_indoor_pipe_temperature() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Outdoor Temperature"
+    unit_of_measurement: "°C"
+    device_class: temperature
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_outdoor_temperature() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Outdoor Condenser Temperature"
+    unit_of_measurement: "°C"
+    device_class: temperature
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_outdoor_condenser_temperature() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Compressor Exhaust Temperature"
+    unit_of_measurement: "°C"
+    device_class: temperature
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_compressor_exhaust_temperature() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Compressor Frequency"
+    unit_of_measurement: "Hz"
+    device_class: frequency
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_compressor_frequency_setting() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Current IAB"
+    unit_of_measurement: "A"
+    device_class: current
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_iab() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Current IBC"
+    unit_of_measurement: "A"
+    device_class: current
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_ibc() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Voltage IUV"
+    unit_of_measurement: "V"
+    device_class: voltage
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_iuv() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Power-on Timer Hours"
+    unit_of_measurement: "h"
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_poweron_hour() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Power-on Timer Minutes"
+    unit_of_measurement: "min"
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_poweron_minute() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Power-off Timer Hours"
+    unit_of_measurement: "h"
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_poweroff_hour() : optional<int>{};
+
+  - <<: *ac_sensor_base
+    name: "Power-off Timer Minutes"
+    unit_of_measurement: "min"
+    lambda: |-
+      return (id(hisense_climate) != nullptr && id(hisense_climate).is_ready())
+        ? id(hisense_climate).get_poweroff_minute() : optional<int>{};

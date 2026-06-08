@@ -1,0 +1,54 @@
+# ESPHome config — AEH-W4G2 with replaced 2MB flash chip, full features + OTA
+# More info: https://github.com/kadam12g/AEH-W4G2-ESPHome
+#
+# USE WHEN: You have replaced the original 1MB flash chip on the AEH-W4G2 board
+# with a compatible 2MB chip. This unlocks the 788k OTA partition, allowing full
+# features AND OTA updates.
+#
+# See hardware/replacement_chips.ods for compatible replacement chip options.
+
+substitutions:
+  device_name: ac-aeh-w4g2-full
+  upper_name: AEH-W4G2 AC
+
+esphome:
+  name: ${device_name}
+  friendly_name: ${upper_name}
+  platformio_options:
+    platform_packages:
+      - framework-arduino-api @ https://github.com/hn/ArduinoCore-API#RingBufferFix
+
+rtl87xx:
+  board: generic-rtl8710bn-2mb-788k
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/kadam12g/AEH-W4G2-ESPHome
+      path: my_components
+    components: [hisense_ac]
+
+packages:
+  base: github://kadam12g/AEH-W4G2-ESPHome/examples/base.yaml@main
+
+logger:
+  level: WARN
+  baud_rate: 0
+
+api:
+  encryption:
+    key: !secret api_encryption
+
+web_server:
+  port: 80
+
+ota:
+  - platform: esphome
+    password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  ap:
+    ssid: "${upper_name} Hotspot"
+    password: !secret hotspot_password
