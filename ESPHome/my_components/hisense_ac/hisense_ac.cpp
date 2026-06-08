@@ -78,6 +78,8 @@ void HisenseAC::setup() {
   this->current_temperature = 25;
   this->fan_mode = climate::CLIMATE_FAN_AUTO;
   this->swing_mode = climate::CLIMATE_SWING_OFF;
+
+  this->set_supported_custom_fan_modes({"Quiet", "Med-Low", "Med-High"});
   
   ESP_LOGI(TAG, "=== Hisense AC Setup Complete ===");
   ESP_LOGCONFIG(TAG, "Hisense AC setup complete");
@@ -307,12 +309,7 @@ climate::ClimateTraits HisenseAC::traits() {
     climate::CLIMATE_FAN_HIGH      // Level 18: High
   });
   
-  // Add custom fan modes for the intermediate levels
-  traits.set_supported_custom_fan_modes({
-    "Quiet",      // Level 2: Quiet mode
-    "Med-Low",    // Level 12: Medium low
-    "Med-High"    // Level 16: Medium high
-  });
+  // Custom fan modes are set on the entity in setup(), not on traits
   
   // Supported swing modes
   traits.set_supported_swing_modes({
