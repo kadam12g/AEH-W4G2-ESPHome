@@ -31,7 +31,7 @@ rtl87xx:
 external_components:
   - source:
       type: git
-      url: https://github.com/kadam12g/Hisense-AC-ESPHome
+      url: https://github.com/kadam12g/AEH-W4G2-ESPHome
       path: ESPHome/my_components
     components: [hisense_ac]
 
