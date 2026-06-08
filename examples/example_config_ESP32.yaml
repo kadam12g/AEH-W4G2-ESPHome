@@ -1,38 +1,28 @@
-# Complete ESPHome configuration for Hisense AC component
+# Example ESPHome configuration for AEH-W4G2 AC component to flash on an ESP32 to use with as RS485 converter board
+# More info at: https://github.com/kadam12g/AEH-W4G2-ESPHome
 # This configuration provides full* AC control and monitoring via Home Assistant
+#
+# *Every command works that my Hisense ACs implements and all data sent by my units is parsed properly.
+# This does not guarantee perfect compatibility with your specific AC model.
 
 substitutions:
-  device_name: ac-bedroom
-  upper_name: AC Bedroom
-  #device_name: ac-guestroom
-  #upper_name: AC Guestroom
+  device_name: ac-aeh-w4g2-esp32-example
+  upper_name: AEH-W4G2 AC ESP32
 
 esphome:
   name: ${device_name}
   friendly_name: ${upper_name}
-  platformio_options:
-    platform_packages:
-      - framework-arduino-api @ https://github.com/hn/ArduinoCore-API#RingBufferFix
 
-#esp32:
-#  board: esp32dev
-#  framework:
-#    type: arduino
-    
-rtl87xx:
-  board: generic-rtl8710bn-2mb-788k
-
-# Configure safe mode 
-#safe_mode:
-#  disabled: false
-#  reboot_timeout: 10min
-#  num_attempts: 5
+esp32:
+  board: esp32dev # Or whatever ESP32 board you have
+  framework:
+    type: arduino
 
 external_components:
   - source:
       type: git
       url: https://github.com/kadam12g/AEH-W4G2-ESPHome
-      path: ESPHome/my_components
+      path: my_components
     components: [hisense_ac]
 
 # Logging configuration - UART0 disabled to avoid conflicts
@@ -67,8 +57,8 @@ web_server:
 # UART configuration for AC communication
 uart:
   id: ac_uart
-  tx_pin: PA23 #GPIO1  # Adjust pins according to your wiring
-  rx_pin: PA18 #GPIO3  # Adjust pins according to your wiring
+  tx_pin: GPIO1  # Adjust pins according to your wiring
+  rx_pin: GPIO3  # Adjust pins according to your wiring
   baud_rate: 9600
   data_bits: 8
   parity: NONE
@@ -109,7 +99,7 @@ climate:
     name: "Hisense AC"
     id: hisense_climate
     uart_id: ac_uart
-    flow_control_pin: PA14 #W4G2 needs it
+#    flow_control_pin: GPIOXX # If your RS485 board has a flow control/mode pin, set it here
     on_state:
       then:
         - lambda: |-
