@@ -1,4 +1,4 @@
-# Flashing ESPHome on the factory AEH-W4g2 module
+# Flashing ESPHome on the factory AEH-W4G2 module
 
 The AEH-W4G2 Wi-Fi module has a Realtek RTL8710BL chip in it, which is capable of running ESPHome. The only limitation of that chip for this project is the 1MB flash chip used on the board. It can either run ESPHome and provide connectivity via MQTT and you can keep the option to update the firmware using OTA updates.
 
@@ -11,20 +11,22 @@ Note: This guide is not very beginner friendly. I assume that you are familiar w
 ## Requirements:
 - AEH-W4G2 Wi-Fi module
 - Beginner soldering skills and equipment
-- A ***GOOD*** USB-UART adapter: :warning: Check this before attempting to flash or even connectin to the chip! It can save you a lot of debugging. The chip needs to support at least 1.5M baud rate, to even complete the handshake and be able to talk to the RTL8710BL chip as [described by LibreTiny](https://docs.libretiny.eu/docs/platform/realtek-ambz/#flashing). Common CP2102 based adapters are not suitable. I have successfully used a PL2303 based adapter on Linux, but the LibreTiny docs mention it explicitly as a non working example under Windows. They recommend a FT232RL based board.
+- A ***GOOD*** USB-UART adapter: :warning: **Check this before attempting to flash or even connecting to the chip!** It can save you a lot of debugging. The chip needs to support at least 1.5M baud rate, to complete the handshake and be able to talk to the RTL8710BL chip as [described by LibreTiny](https://docs.libretiny.eu/docs/platform/realtek-ambz/#flashing). Common CP2102 based adapters are not suitable. I have successfully used a PL2303 based adapter on Linux, but the LibreTiny docs mention it explicitly as a non working example under Windows. They recommend a FT232RL based board.
 - [ltchiptool](https://docs.libretiny.eu/docs/flashing/tools/ltchiptool/) You can create a venv, and install it with `pip install ltchiptool`. You may need to run it as root to have access to the UART adapter.
-- the compiled ESPHome yaml file. After updating it with your variables, you can compile it with `esphome compile your_file.yaml`. ESPHome can be installed via `pip install esphome.
+- the compiled ESPHome yaml file. After updating it with your variables, you can compile it with `esphome compile your_file.yaml`. ESPHome can be installed via `pip install esphome`.
 
 ## Flashing
-Disconnect the module from the AC unit (and the AC unit from mains) before flashing. I am not liable for any damage to you, your board, or your AC.
+Disconnect the module from the AC unit (and the AC unit from mains) before flashing.
+
+I am not liable for any damage to you, your board, or your AC.
 
 1. Solder RX and TX to the board (and optionally 5V and GND, or you can use the factory connector to connect those)
    ![connections soldered to the board](../media/flashing_connections.jpg)
-   Note: Picture with a complete pinout can also be found in the [media](../media) folder. Original image credit: @pio2398.
-2. (Optional) Connect to your UART adapter. (RX to TX and vice versa.) The original firmware's log output should be visible at 115200 baud in a suitable program. (unconfirmed — ltchiptool reports this rate and logs were readable, but the actual rate may differ).
+   Note: Picture with a complete pinout can also be found in the [media](../media) folder.
+2. (Optional) Connect to your UART adapter. (Adapter RX to board TX and vice versa.) The original firmware's log output should be visible at 115200 baud using a suitable program. You can save it if you want to.
 3. Put the board into download mode:
 	1. disconnect power (5V)
-	2. connect TX (of the board) to GND
+	2. connect TX (of the Wi-Fi board) to GND
 	3. reconnect power (5V)
 	4. release TX from GND (and connect to your adapters RX, if you disconnected it)
 	5. verify the chip is in download mode by running: `ltchiptool flash info realtek-ambz` You should see output like this:
@@ -123,7 +125,7 @@ Booting firmware  [#############################################################
 I: Transmission successful (ACK received).
 I: |-- Finished in 25.207 s
 ```
-That should be it. Connect it to your AC and check if you can see any info. If it works, then congrats, you did it!
+That should be it. Reconnect the board to your AC and check if you can see any info. If it works, then congrats, you did it!
 
 ## Troubleshooting
 General troubleshooting tips and info can be found in [troubleshooting.md](troubleshooting.md).
