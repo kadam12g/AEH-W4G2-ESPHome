@@ -92,9 +92,7 @@ I:  - release CEN from GND
 I:  - release TX2 from GND
 ```
 
-
-	6.  (Optional) save the original firmware from the chip. Run `ltchiptool flash read realtek-ambz -d /dev/ttyUSB0 stock_firmware.bin` Output should look like:
-
+4.  (Optional) save the original firmware from the chip. Run `ltchiptool flash read realtek-ambz -d /dev/ttyUSB0 stock_firmware.bin` Output should look like:
 
 ```
 I: Connecting to 'Realtek AmebaZ' on /dev/ttyUSB0 @ 1500000
@@ -108,7 +106,7 @@ I: Transmission successful (ACK received).
 I: |-- Finished in 45.568 s 
 ```
 
-	7. Flash ESPHome by running `ltchiptool flash write -d /dev/ttyUSB0 /your/path/.esphome/build/your_device/.pioenvs/your_device/firmware.bin `. 
+5. Flash ESPHome by running `ltchiptool flash write -d /dev/ttyUSB0 /your/path/.esphome/build/your_device/.pioenvs/your_device/firmware.bin `. 
 	   Output should look like:
 
 ```
