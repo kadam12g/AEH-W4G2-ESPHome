@@ -46,6 +46,6 @@ The board's factory firmware can be found [here](../firmware). It uses a baud ra
 
 The UART2_RX and UART2_TX (PA29 and PA30) can be used to read the device's logs at a baud rate of 115200.
 
-# References 
+## References 
 - [FCC documents](FCC)
 - Images
