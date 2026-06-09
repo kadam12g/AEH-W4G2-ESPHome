@@ -15,12 +15,12 @@ The module uses a 4-pin JST-SM connector:
 
 The connector pinout is:
 
-```
-1 +5V (red)
-2 RS485 A+ (white)
-3 RS485 B- (yellow)
-4 GND (blue)
-```
+| Pin | Signal | Wire colour |
+|-----|--------|-------------|
+| 1 | +5V | red |
+| 2 | RS485 A+ | white |
+| 3 | RS485 B- | yellow |
+| 4 | GND | blue |
 
 The pinout is also detailed in [the FCC document](FCC/AEH-W4G2_FCC_1.pdf).
 
