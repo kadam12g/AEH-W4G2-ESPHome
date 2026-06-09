@@ -47,6 +47,7 @@ docs/_build/
 .claude/
 tools/manual.py
 CLAUDE.md
+media/strip_exif.sh
 
 # Firmware with account info in it
 firmware/firmware_backup.bin
