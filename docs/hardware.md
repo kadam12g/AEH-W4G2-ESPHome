@@ -6,7 +6,8 @@ The AEH-W4G2 module can be identified by the markings visible in the image:
 Normally, if your AC came with it, it should be visible if you just open up the top cover (for Hisense models). The position of the module inside the AC is visible in the image below:
 ![module mounted in AC](../media/module_in_ac.jpg)
 
-The red circles indicate the 2 screw positions; remove these screws to free the module. 
+The red circles indicate the 2 screw positions; remove these screws to free the module.
+
 :warning: Note: under the black cover, there are live wires next to where the module can be disconnected. Disconnect the AC from mains before you attempt to unplug the module cable. My connector had a clamp/bracket that was holding the connector to the plug, and that had to be pried off first, before the connector could be disconnected.
 
 The module uses a 4-pin JST-SM connector:
