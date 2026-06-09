@@ -45,3 +45,7 @@ The board bottom has a bunch of test points. The exact pinout is visible in this
 The board's factory firmware can be found [here](../firmware). It uses a baud rate of `9600` to communicate with the AC via the RS-485 transceiver. `PA23` (GPIOA_23) is TX, `PA18` (GPIOA_18) is RX, and `PA14` (GPIOA_14) is connected to the RS-485 transceiver as a flow control pin.
 
 The UART2_RX and UART2_TX (PA29 and PA30) can be used to read the device's logs at a baud rate of 115200.
+
+# References 
+- [FCC documents](FCC)
+- Images
