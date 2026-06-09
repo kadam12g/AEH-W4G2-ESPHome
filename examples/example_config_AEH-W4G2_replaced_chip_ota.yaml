@@ -32,7 +32,7 @@ packages:
   base: github://kadam12g/AEH-W4G2-ESPHome/examples/base.yaml@main
 
 logger:
-  level: WARN
+  level: INFO
   baud_rate: 0
 
 api:

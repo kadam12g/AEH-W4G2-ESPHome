@@ -64,7 +64,9 @@ I: | CUT Version         | 0                              |
 I: +---------------------+--------------------------------+
 I: |-- Finished in 5.298 s
 ```
+
 If you instead see the following, check your wiring and retry putting the chip into download mode:
+
 ```
 I: Connect UART2 of the Realtek chip to the USB-TTL adapter:
 I:          TX | ------ | RX2 (Log_RX / PA29) 
@@ -90,7 +92,9 @@ I:  - release CEN from GND
 I:  - release TX2 from GND
 ```
 
+
 	6.  (Optional) save the original firmware from the chip. Run `ltchiptool flash read realtek-ambz -d /dev/ttyUSB0 stock_firmware.bin` Output should look like:
+
 
 ```
 I: Connecting to 'Realtek AmebaZ' on /dev/ttyUSB0 @ 1500000
@@ -103,8 +107,10 @@ I: Transmission successful (ACK received).
 
 I: |-- Finished in 45.568 s 
 ```
+
 	7. Flash ESPHome by running `ltchiptool flash write -d /dev/ttyUSB0 /your/path/.esphome/build/your_device/.pioenvs/your_device/firmware.bin `. 
 	   Output should look like:
+
 ```
 I: Detected file type: UF2 - esphome 202X.X.X
 I: Connecting to 'Realtek AmebaZ' on /dev/ttyUSB0 @ 1500000
