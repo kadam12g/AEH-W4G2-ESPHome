@@ -48,4 +48,5 @@ The UART2_RX and UART2_TX (PA29 and PA30) can be used to read the device's logs 
 
 ## References 
 - [FCC documents](FCC)
+- [LibreTiny docs](https://docs.libretiny.eu/docs/platform/realtek-ambz/)
 - Images
